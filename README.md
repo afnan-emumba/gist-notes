@@ -1,50 +1,51 @@
-# React + TypeScript + Vite
+# Git Notes - Advanced Level
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+This project, **Git Notes**, aims to provide a powerful and user-friendly solution for managing GitHub Gists. While Gists are popular for sharing code snippets, configuration files, and more, this application elevates the experience by offering seamless management, enhanced functionality, and intuitive design.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+### **Landing Page**
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Displays a paginated list of public Gists from the GitHub API.
+- **Layouts**:
+  - List Layout
+  - Grid Layout
+- **Search**: Search for Gists using their ID.
+- **Header**: Includes a login menu for GitHub authentication.
 
-- Configure the top-level `parserOptions` property like this:
+### **Login**
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Login using GitHub OAuth.
+- Maintains the user session.
+- Displays the user profile picture in the header after logging in.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### **Gist Page**
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- Displays detailed information about a selected Gist, including owner details.
+- Users can:
+  - Star a Gist.
+  - Fork a Gist (available only after logging in).
+- Public Gists:
+  - Editing and deleting options are disabled.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### **Create Gist**
+
+- Allows users to create a new Gist with multiple files.
+- Add files dynamically with the "Add File" button.
+- Submit the Gist using the "Create Gist" button.
+
+### **User Profile**
+
+- Access via the profile menu:
+  - View and manage the user’s own Gists.
+  - View starred Gists (starred Gists display a filled star icon).
+- Logout functionality to end the session.
+
+### **Dynamic Updates**
+
+- Real-time updates for all operations:
+  - Starred Gists.
+  - Forked Gists.
+  - Created Gists.
