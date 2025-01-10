@@ -1,0 +1,17 @@
+@import "../../theme/style";
+
+.navbar {
+  background-color: $primary;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  box-shadow: $boxShadow;
+}
+
+.navItems {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}

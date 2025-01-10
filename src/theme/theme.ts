@@ -9,8 +9,8 @@ export const antTheme = {
   },
   components: {
     Button: {
-      paddingBlock: 8,
-      paddingInline: 32,
+      paddingBlock: 12,
+      paddingInline: 24,
     },
   },
 };
