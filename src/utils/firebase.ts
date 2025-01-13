@@ -1,0 +1,18 @@
+import { initializeApp } from "firebase/app";
+import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: "gist-notes-afnan.firebaseapp.com",
+  projectId: "gist-notes-afnan",
+  storageBucket: "gist-notes-afnan.firebasestorage.app",
+  messagingSenderId: "551656089533",
+  appId: "1:551656089533:web:4ec6f19dea0e6346e514d4",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GithubAuthProvider();
+provider.addScope("gist");
+
+export { auth, provider, signInWithPopup };
