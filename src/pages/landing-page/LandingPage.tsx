@@ -1,13 +1,33 @@
-import { Radio } from "antd";
+import { GridIcon, ListIcon } from "../../assets/icons";
+import styles from "./LandingPage.module.scss";
+import { useState } from "react";
 
 const LandingPage = () => {
+  const [selectedView, setSelectedView] = useState("list");
+
   return (
-    <div>
-      <Radio.Group>
-        <Radio.Button value='large'>Large</Radio.Button>
-        <Radio.Button value='default'>Default</Radio.Button>
-        <Radio.Button value='small'>Small</Radio.Button>
-      </Radio.Group>
+    <div className={styles.content}>
+      <div className={styles.header}>
+        <h1>Public Gists</h1>
+        <div className={styles.toggleButtonGroup}>
+          <button
+            className={`${styles.button} ${
+              selectedView === "grid" ? styles.buttonActive : ""
+            }`}
+            onClick={() => setSelectedView("grid")}
+          >
+            <GridIcon />
+          </button>
+          <button
+            className={`${styles.button} ${
+              selectedView === "list" ? styles.buttonActive : ""
+            }`}
+            onClick={() => setSelectedView("list")}
+          >
+            <ListIcon />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

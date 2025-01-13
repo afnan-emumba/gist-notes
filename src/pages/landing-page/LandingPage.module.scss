@@ -1,0 +1,42 @@
+@use "../../theme/style" as *;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 400;
+  color: $primary-color;
+}
+
+.toggleButtonGroup {
+  display: flex;
+}
+
+.button {
+  border: 1px solid #e3e3e3;
+  background-color: transparent;
+  color: #b7b7b7;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  &:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
+.buttonActive {
+  background-color: #e3e3e3;
+  color: $primary-color;
+}
