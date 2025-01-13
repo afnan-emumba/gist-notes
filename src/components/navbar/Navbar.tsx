@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button, Input } from "antd";
 import Logo from "../../assets/Emumba-logo.svg";
 import { SearchIconNav } from "../../assets/icons";
@@ -6,7 +7,10 @@ import styles from "./Navbar.module.scss";
 const Navbar = () => {
   return (
     <nav className={styles.navbar}>
-      <img src={Logo} alt='emumba-logo' />
+      <Link to={"/"}>
+        <img src={Logo} alt='emumba-logo' />
+      </Link>
+
       <div className={styles.navItems}>
         <Input
           placeholder='Search gists...'

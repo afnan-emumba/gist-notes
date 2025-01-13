@@ -24,4 +24,19 @@ const auth = getAuth(app);
 const provider = new GithubAuthProvider();
 provider.addScope("gist");
 
-export { auth, provider, signInWithPopup };
+export const LoginWithGithub = async () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      const token = credential!.accessToken;
+      if (!token) return;
+
+      console.log(token);
+
+      const user = result.user;
+      console.log(user);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};

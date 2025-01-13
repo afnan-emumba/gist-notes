@@ -1,12 +1,12 @@
-@use "../../theme/style" as theme;
+@use "../../theme/style" as *;
 
 .navbar {
-  background-color: theme.$primary-color;
+  background-color: $primary-color;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 32px;
-  box-shadow: theme.$box-shadow;
+  box-shadow: $box-shadow;
 }
 
 .navItems {
@@ -17,19 +17,19 @@
 }
 
 .navButton {
-  background-color: theme.$secondary-color;
-  color: theme.$primary-color;
+  background-color: $secondary-color;
+  color: $primary-color;
   height: 40px;
   font-weight: bold;
 }
 
 .navSearch {
   background-color: transparent;
-  border: 1px solid theme.$secondary-color;
+  border: 1px solid $secondary-color;
   height: 40px;
   width: 300px;
-  color: theme.$secondary-color;
-  opacity: 0.8;
+  color: $secondary-color;
+  opacity: 0.7;
 
   &:focus-within {
     opacity: 1;
@@ -40,16 +40,16 @@
 
 .navbar :global(.ant-btn) {
   &:hover {
-    background-color: theme.$secondary-color !important;
-    color: theme.$primary-color !important;
+    background-color: $secondary-color !important;
+    color: $primary-color !important;
     opacity: 0.95 !important;
   }
 }
 
 .navbar :global(.ant-input-affix-wrapper) {
   background-color: transparent !important;
-  border: 1px solid theme.$secondary-color !important;
-  color: theme.$secondary-color !important;
+  border: 1px solid $secondary-color !important;
+  color: $secondary-color !important;
 }
 
 .navbar :global(.ant-input) {
@@ -57,6 +57,6 @@
   font-family: "Inter", sans-serif;
 
   &::placeholder {
-    color: theme.$secondary-color !important;
+    color: $secondary-color !important;
   }
 }
