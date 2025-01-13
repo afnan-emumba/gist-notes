@@ -15,6 +15,15 @@ export const antTheme = {
       primaryShadow: "none",
       dangerShadow: "none",
     },
+    Table: {
+      borderColor: "#efefef",
+      rowHoverBg: "#efefef",
+      headerBg: "#efefef",
+      footerBg: "#efefef",
+      headerSplitColor: "none",
+      cellPaddingBlock: 14,
+      headerBorderRadius: 8,
+    },
   },
 };
 

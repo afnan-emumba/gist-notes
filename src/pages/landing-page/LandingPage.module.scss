@@ -1,5 +1,12 @@
 @use "../../theme/style" as *;
 
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -20,7 +27,7 @@
   border: 1px solid #e3e3e3;
   background-color: transparent;
   color: #b7b7b7;
-  padding: 10px 16px;
+  padding: 10px 12px;
   display: flex;
   justify-content: center;
   align-items: center;
