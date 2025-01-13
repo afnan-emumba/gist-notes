@@ -1,12 +1,12 @@
-@import "../../theme/style";
+@use "../../theme/style" as theme;
 
 .navbar {
-  background-color: $primary;
+  background-color: theme.$primary-color;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 32px;
-  box-shadow: $boxShadow;
+  box-shadow: theme.$box-shadow;
 }
 
 .navItems {
@@ -14,4 +14,49 @@
   justify-content: center;
   align-items: center;
   gap: 32px;
+}
+
+.navButton {
+  background-color: theme.$secondary-color;
+  color: theme.$primary-color;
+  height: 40px;
+  font-weight: bold;
+}
+
+.navSearch {
+  background-color: transparent;
+  border: 1px solid theme.$secondary-color;
+  height: 40px;
+  width: 300px;
+  color: theme.$secondary-color;
+  opacity: 0.8;
+
+  &:focus-within {
+    opacity: 1;
+  }
+}
+
+// Ant Overrides
+
+.navbar :global(.ant-btn) {
+  &:hover {
+    background-color: theme.$secondary-color !important;
+    color: theme.$primary-color !important;
+    opacity: 0.95 !important;
+  }
+}
+
+.navbar :global(.ant-input-affix-wrapper) {
+  background-color: transparent !important;
+  border: 1px solid theme.$secondary-color !important;
+  color: theme.$secondary-color !important;
+}
+
+.navbar :global(.ant-input) {
+  margin-left: 4px;
+  font-family: "Inter", sans-serif;
+
+  &::placeholder {
+    color: theme.$secondary-color !important;
+  }
 }

@@ -1,5 +1,6 @@
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import Logo from "../../assets/Emumba-logo.svg";
+import { SearchIconNav } from "../../assets/icons";
 import styles from "./Navbar.module.scss";
 
 const Navbar = () => {
@@ -7,16 +8,12 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       <img src={Logo} alt='emumba-logo' />
       <div className={styles.navItems}>
-        <p>Search bar</p>
-        <Button
-          type='primary'
-          style={{
-            backgroundColor: "white",
-            color: "#003B44",
-            height: "40px",
-            fontWeight: "bold",
-          }}
-        >
+        <Input
+          placeholder='Search gists...'
+          prefix={<SearchIconNav />}
+          className={styles.navSearch}
+        />
+        <Button type='primary' className={styles.navButton}>
           Login
         </Button>
       </div>

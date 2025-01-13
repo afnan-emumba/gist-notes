@@ -11,6 +11,9 @@ export const antTheme = {
     Button: {
       paddingBlock: 12,
       paddingInline: 24,
+      defaultShadow: "none",
+      primaryShadow: "none",
+      dangerShadow: "none",
     },
   },
 };
