@@ -7,7 +7,7 @@ import "./App.css";
 
 function App() {
   return (
-    <ConfigProvider theme={antTheme}>
+    <ConfigProvider wave={{ disabled: true }} theme={antTheme}>
       <BrowserRouter>
         <Routes>
           {routes.map(({ path, component: Component }) => (

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GithubAuthProvider } from "firebase/auth";
 
 interface FirebaseConfig {
   apiKey: string;
@@ -20,23 +20,6 @@ const firebaseConfig: FirebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GithubAuthProvider();
+export const auth = getAuth(app);
+export const provider = new GithubAuthProvider();
 provider.addScope("gist");
-
-export const LoginWithGithub = async () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const credential = GithubAuthProvider.credentialFromResult(result);
-      const token = credential!.accessToken;
-      if (!token) return;
-
-      console.log(token);
-
-      const user = result.user;
-      console.log(user);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};

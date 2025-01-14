@@ -40,7 +40,6 @@ const LandingPage = () => {
         <Table
           columns={tableColumns}
           dataSource={[]}
-          footer={() => "Footer"}
           className={styles.table}
           bordered
         />
