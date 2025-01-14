@@ -47,3 +47,9 @@
   background-color: #e3e3e3;
   color: $primary-color;
 }
+
+.gistCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}

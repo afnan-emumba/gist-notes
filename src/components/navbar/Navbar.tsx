@@ -35,7 +35,6 @@ const Navbar = () => {
       </Link>
 
       <div className={styles.navItems}>
-        {user && <h3>Welcome, {user.displayName}</h3>}
         <Input
           placeholder='Search gists...'
           prefix={<SearchIconNav />}

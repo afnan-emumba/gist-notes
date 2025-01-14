@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Table } from "antd";
+import { Table, Pagination } from "antd";
 import { GridIcon, ListIcon } from "../../assets/icons";
 import tableColumns from "./TableColumns";
+import GistCard from "../../components/gist-card/GistCard";
 import styles from "./LandingPage.module.scss";
 
 const LandingPage = () => {
   const [selectedView, setSelectedView] = useState("list");
+
+  const pagination = (
+    <Pagination simple align='end' defaultCurrent={2} total={50} />
+  );
 
   return (
     <>
@@ -36,13 +41,24 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-
-        <Table
-          columns={tableColumns}
-          dataSource={[]}
-          className={styles.table}
-          bordered
-        />
+        {selectedView === "grid" ? (
+          <>
+            <div className={styles.gistCards}>
+              {[...Array(6)].map((_, i) => (
+                <GistCard key={i} />
+              ))}
+            </div>
+            {pagination}
+          </>
+        ) : (
+          <Table
+            columns={tableColumns}
+            dataSource={[]}
+            className={styles.table}
+            bordered
+            footer={() => pagination}
+          />
+        )}
       </div>
     </>
   );
