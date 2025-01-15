@@ -36,6 +36,10 @@
   }
 }
 
+.userAvatar {
+  cursor: pointer;
+}
+
 // Ant Overrides
 
 .navbar :global(.ant-btn) {

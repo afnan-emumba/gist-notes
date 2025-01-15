@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import { Table, Pagination } from "antd";
 import { GridIcon, ListIcon } from "../../assets/icons";
 import tableColumns from "./TableColumns";
 import GistCard from "../../components/gist-card/GistCard";
+import { RootState, AppDispatch } from "../../redux/store";
+import { getPublicGists } from "../../redux/slices/publicGistsSlice";
 import styles from "./LandingPage.module.scss";
 
 const LandingPage = () => {
   const [selectedView, setSelectedView] = useState("list");
+  const dispatch = useDispatch<AppDispatch>();
+  const { gists, loading, error } = useSelector(
+    (state: RootState) => state.publicGists
+  );
+
+  useEffect(() => {
+    dispatch(getPublicGists());
+  }, [dispatch]);
 
   const pagination = (
     <Pagination simple align='end' defaultCurrent={2} total={50} />
@@ -41,11 +52,15 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        {selectedView === "grid" ? (
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : selectedView === "grid" ? (
           <>
             <div className={styles.gistCards}>
-              {[...Array(6)].map((_, i) => (
-                <GistCard key={i} />
+              {gists.map((gist, i) => (
+                <GistCard key={i} gist={gist} />
               ))}
             </div>
             {pagination}
@@ -53,10 +68,13 @@ const LandingPage = () => {
         ) : (
           <Table
             columns={tableColumns}
-            dataSource={[]}
+            dataSource={gists}
             className={styles.table}
-            bordered
             footer={() => pagination}
+            style={{
+              border: "1px solid #e5e5e5",
+              borderRadius: "8px",
+            }}
           />
         )}
       </div>

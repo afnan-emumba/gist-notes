@@ -1,7 +1,11 @@
 import styles from "./GistCard.module.scss";
 
-const GistCard = () => {
-  return <div className={styles.gistCard}>GistCard</div>;
+interface GistCardProps {
+  gist: any;
+}
+
+const GistCard = ({ gist }: GistCardProps) => {
+  return <div className={styles.gistCard}>{gist.url}</div>;
 };
 
 export default GistCard;
