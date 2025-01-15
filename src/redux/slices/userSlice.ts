@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { UserType } from "../../types/user";
+import { User } from "firebase/auth";
 
 interface UserState {
-  user: UserType | null;
+  user: User | null;
   loading: boolean;
   error: string | null;
 }
@@ -18,7 +18,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserType>) => {
+    setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -40,4 +40,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { setError, setLoading, setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

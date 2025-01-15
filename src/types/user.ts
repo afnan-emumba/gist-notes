@@ -1,5 +1,5 @@
 export interface UserType {
-  name: string;
+  screenName: string;
   email: string;
-  avatar: string;
+  photoUrl: string;
 }
