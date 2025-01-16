@@ -11,17 +11,32 @@ import styles from "./LandingPage.module.scss";
 
 const LandingPage = () => {
   const [selectedView, setSelectedView] = useState("list");
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch<AppDispatch>();
   const { gists, loading, error } = useSelector(
     (state: RootState) => state.publicGists
   );
+  const token = import.meta.env.VITE_GITHUB_TOKEN as string;
 
   useEffect(() => {
-    dispatch(getPublicGists());
-  }, [dispatch]);
+    if (token) {
+      dispatch(getPublicGists({ page: currentPage, token }));
+    }
+  }, [dispatch, currentPage, token]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const pagination = (
-    <Pagination simple align='end' defaultCurrent={2} total={50} />
+    <Pagination
+      simple
+      align='end'
+      current={currentPage}
+      total={50}
+      pageSize={10}
+      onChange={handlePageChange}
+    />
   );
 
   return (
@@ -60,7 +75,7 @@ const LandingPage = () => {
           <>
             <div className={styles.gistCards}>
               {gists.map((gist, i) => (
-                <GistCard key={i} gist={gist} />
+                <GistCard key={i} gistId={gist.id} />
               ))}
             </div>
             {pagination}
@@ -70,6 +85,7 @@ const LandingPage = () => {
             columns={tableColumns}
             dataSource={gists}
             className={styles.table}
+            pagination={false}
             footer={() => pagination}
             style={{
               border: "1px solid #e5e5e5",

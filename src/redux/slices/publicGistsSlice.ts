@@ -13,16 +13,19 @@ const initialState: PublicGistsState = {
   error: null,
 };
 
-const fetchPublicGists = async () => {
-  const response = await axios.get("https://api.github.com/gists/public");
+const fetchPublicGists = async (page: number, token: string) => {
+  const response = await axios.get("https://api.github.com/gists/public", {
+    params: { per_page: 10, page },
+    headers: { Authorization: `token ${token}` },
+  });
   return response.data;
 };
 
 export const getPublicGists = createAsyncThunk(
   "publicGists/getPublicGists",
-  async (_, { rejectWithValue }) => {
+  async ({ page, token }: { page: number; token: string }, { rejectWithValue }) => {
     try {
-      const data = await fetchPublicGists();
+      const data = await fetchPublicGists(page, token);
       return data;
     } catch (error) {
       return rejectWithValue((error as Error).message);

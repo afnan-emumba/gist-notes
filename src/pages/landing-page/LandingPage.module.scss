@@ -53,3 +53,24 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
+
+.notebook {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.keywordContainer {
+  width: 150px;
+}
+
+.keyword {
+  width: fit-content;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  background-color: $primary-color;
+  color: $secondary-color;
+  display: flex;
+  padding: 4px 16px;
+  border-radius: 100px;
+}
