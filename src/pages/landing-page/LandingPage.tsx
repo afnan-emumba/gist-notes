@@ -16,6 +16,7 @@ const LandingPage = () => {
   const { gists, loading, error } = useSelector(
     (state: RootState) => state.publicGists
   );
+
   const token = import.meta.env.VITE_GITHUB_TOKEN as string;
 
   useEffect(() => {
@@ -32,10 +33,11 @@ const LandingPage = () => {
     <Pagination
       simple
       align='end'
+      defaultCurrent={1}
       current={currentPage}
-      total={50}
-      pageSize={10}
+      total={3000}
       onChange={handlePageChange}
+      showSizeChanger={false}
     />
   );
 
@@ -90,6 +92,8 @@ const LandingPage = () => {
             style={{
               border: "1px solid #e5e5e5",
               borderRadius: "8px",
+              tableLayout: "fixed",
+              wordWrap: "break-word",
             }}
           />
         )}
