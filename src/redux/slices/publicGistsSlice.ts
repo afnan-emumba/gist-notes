@@ -13,9 +13,13 @@ const initialState: PublicGistsState = {
   error: null,
 };
 
-const fetchPublicGists = async (page: number, token: string) => {
+const fetchPublicGists = async (
+  page: number,
+  perPage: number,
+  token: string
+) => {
   const response = await axios.get("https://api.github.com/gists/public", {
-    params: { per_page: 10, page },
+    params: { per_page: perPage, page },
     headers: { Authorization: `token ${token}` },
   });
   return response.data;
@@ -23,9 +27,12 @@ const fetchPublicGists = async (page: number, token: string) => {
 
 export const getPublicGists = createAsyncThunk(
   "publicGists/getPublicGists",
-  async ({ page, token }: { page: number; token: string }, { rejectWithValue }) => {
+  async (
+    { page, perPage, token }: { page: number; perPage: number; token: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const data = await fetchPublicGists(page, token);
+      const data = await fetchPublicGists(page, perPage, token);
       return data;
     } catch (error) {
       return rejectWithValue((error as Error).message);

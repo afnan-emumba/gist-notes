@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Skeleton } from "antd";
 import styles from "./GistCard.module.scss";
 import CodePreview from "../code-preview/CodePreview";
 
@@ -14,7 +13,6 @@ const GistCard = ({ gistId }: GistCardProps) => {
     state.publicGists.gists.find((gist) => gist.id === gistId)
   );
   const [fileContent, setFileContent] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const firstFileKey = Object.keys(gist.files)[0];
@@ -39,8 +37,6 @@ const GistCard = ({ gistId }: GistCardProps) => {
         } else {
           setError("An unknown error occurred.");
         }
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -50,9 +46,7 @@ const GistCard = ({ gistId }: GistCardProps) => {
   return (
     <div className={styles.gistCard}>
       <div className={styles.fileContent}>
-        {loading ? (
-          <Skeleton active />
-        ) : error ? (
+        {error ? (
           <p>Error: {error}</p>
         ) : fileContent ? (
           <CodePreview content={fileContent} />

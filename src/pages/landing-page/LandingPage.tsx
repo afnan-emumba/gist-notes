@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
-import { Table, Pagination } from "antd";
+import { Skeleton } from "antd";
 import { GridIcon, ListIcon } from "../../assets/icons";
-import tableColumns from "./TableColumns";
-import GistCard from "../../components/gist-card/GistCard";
 import { RootState, AppDispatch } from "../../redux/store";
 import { getPublicGists } from "../../redux/slices/publicGistsSlice";
+import GridLayout from "../../layouts/grid-layout/GridLayout";
+import ListLayout from "../../layouts/list-layout/ListLayout";
 import styles from "./LandingPage.module.scss";
 
 const LandingPage = () => {
@@ -21,25 +21,14 @@ const LandingPage = () => {
 
   useEffect(() => {
     if (token) {
-      dispatch(getPublicGists({ page: currentPage, token }));
+      const perPage = selectedView === "grid" ? 6 : 10;
+      dispatch(getPublicGists({ page: currentPage, perPage, token }));
     }
-  }, [dispatch, currentPage, token]);
+  }, [dispatch, currentPage, token, selectedView]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  const pagination = (
-    <Pagination
-      simple
-      align='end'
-      defaultCurrent={1}
-      current={currentPage}
-      total={3000}
-      onChange={handlePageChange}
-      showSizeChanger={false}
-    />
-  );
 
   return (
     <>
@@ -70,31 +59,20 @@ const LandingPage = () => {
           </div>
         </div>
         {loading ? (
-          <p>Loading...</p>
+          <Skeleton active />
         ) : error ? (
           <p>Error: {error}</p>
         ) : selectedView === "grid" ? (
-          <>
-            <div className={styles.gistCards}>
-              {gists.map((gist, i) => (
-                <GistCard key={i} gistId={gist.id} />
-              ))}
-            </div>
-            {pagination}
-          </>
+          <GridLayout
+            gists={gists}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         ) : (
-          <Table
-            columns={tableColumns}
-            dataSource={gists}
-            className={styles.table}
-            pagination={false}
-            footer={() => pagination}
-            style={{
-              border: "1px solid #e5e5e5",
-              borderRadius: "8px",
-              tableLayout: "fixed",
-              wordWrap: "break-word",
-            }}
+          <ListLayout
+            gists={gists}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
           />
         )}
       </div>
