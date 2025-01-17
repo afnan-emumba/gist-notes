@@ -1,0 +1,34 @@
+.gistPage {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ownerInfo {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.fileContent {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}

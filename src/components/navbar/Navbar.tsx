@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Input, Avatar } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -10,6 +10,15 @@ import styles from "./Navbar.module.scss";
 const Navbar = () => {
   const { handleGithubLogin } = useGithubLogin();
   const { user } = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
+
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      const inputElement = event.target as HTMLInputElement;
+      const gistId = inputElement.value;
+      navigate(`/gists/${gistId}`);
+    }
+  };
 
   return (
     <nav className={styles.navbar}>
@@ -23,6 +32,7 @@ const Navbar = () => {
           prefix={<SearchIconNav />}
           className={styles.navSearch}
           variant='outlined'
+          onKeyDown={handleSearch}
         />
 
         {user ? (

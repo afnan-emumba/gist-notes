@@ -1,4 +1,5 @@
 import { Table, Pagination } from "antd";
+import { useNavigate } from "react-router-dom";
 import tableColumns from "../../pages/landing-page/TableColumns";
 import styles from "./ListLayout.module.scss";
 
@@ -9,12 +10,22 @@ interface ListLayoutProps {
 }
 
 const ListLayout = ({ gists, currentPage, onPageChange }: ListLayoutProps) => {
+  const navigate = useNavigate();
+
+  const handleRowClick = (record: any) => {
+    navigate(`/gists/${record.id}`);
+  };
+
   return (
     <Table
       columns={tableColumns}
       dataSource={gists}
       className={styles.table}
       pagination={false}
+      onRow={(record) => ({
+        onClick: () => handleRowClick(record),
+        style: { cursor: "pointer" },
+      })}
       footer={() => (
         <Pagination
           simple
