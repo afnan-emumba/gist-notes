@@ -1,16 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Input, Avatar } from "antd";
-import { useSelector } from "react-redux";
+import { Button, Input, Avatar, Dropdown, MenuProps, Space } from "antd";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
+import { clearUser } from "../../redux/slices/userSlice";
 import useGithubLogin from "../../hooks/useGithubLogin";
 import Logo from "../../assets/Emumba-logo.svg";
 import { SearchIconNav } from "../../assets/icons";
 import styles from "./Navbar.module.scss";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const { handleGithubLogin } = useGithubLogin();
   const { user } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
+
+  console.log("nav user", user);
 
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -19,6 +23,58 @@ const Navbar = () => {
       navigate(`/gists/${gistId}`);
     }
   };
+
+  const items: MenuProps["items"] = [
+    {
+      label: (
+        <div>
+          Signed in as <br />{" "}
+          <span className='font-semibold'>{user?.displayName}</span>
+        </div>
+      ),
+      key: "0",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: <Link to='/my-gists/all'>Your Gists</Link>,
+      key: "1",
+    },
+    {
+      label: <Link to='/my-gists/starred'>Starred Gists</Link>,
+      key: "3",
+    },
+    {
+      label: <Link to='/create'>Create Gist</Link>,
+      key: "4",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: (
+        <a href={`https://github.com/${user?.screenName}`}>
+          Your Github Profile
+        </a>
+      ),
+      key: "5",
+    },
+    {
+      label: (
+        <button
+          style={{ border: "none", background: "none", cursor: "pointer" }}
+          onClick={() => {
+            dispatch(clearUser());
+            navigate("/");
+          }}
+        >
+          Sign out
+        </button>
+      ),
+      key: "6",
+    },
+  ];
 
   return (
     <nav className={styles.navbar}>
@@ -36,9 +92,11 @@ const Navbar = () => {
         />
 
         {user ? (
-          <div className={styles.userAvatar}>
-            <Avatar size={40} src={user.photoURL} />
-          </div>
+          <Dropdown menu={{ items }} trigger={["click"]}>
+            <Space style={{ cursor: "pointer" }}>
+              <Avatar size={40} src={user.photoUrl} />
+            </Space>
+          </Dropdown>
         ) : (
           <Button
             type='primary'
