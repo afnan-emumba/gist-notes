@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { RootState } from "../../redux/store";
 import { Button, Avatar } from "antd";
+import { RootState } from "../../redux/store";
+import { Star2, Fork2, StarFilled } from "../../assets/icons";
 import CodePreview from "../../components/code-preview/CodePreview";
 import styles from "./GistPage.module.scss";
-import axios from "axios";
+import { starGist, checkGistStarred } from "../../services/gistService";
+import toast, { Toaster } from "react-hot-toast";
 
 const GistPage = () => {
   const { gistId } = useParams<{ gistId: string }>();
@@ -15,6 +18,7 @@ const GistPage = () => {
   );
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isStarred, setIsStarred] = useState<boolean>(false);
 
   if (!gist) {
     return <p>Gist not found</p>;
@@ -38,8 +42,31 @@ const GistPage = () => {
       }
     };
 
+    const checkStarredStatus = async () => {
+      if (gistId) {
+        const starred = await checkGistStarred(gistId);
+        setIsStarred(starred);
+      }
+    };
+
     fetchFileContent();
-  }, [rawUrl]);
+    checkStarredStatus();
+  }, [rawUrl, gistId]);
+
+  const handleStarClick = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to star a gist.");
+      return;
+    }
+    if (gistId) {
+      await starGist(gistId);
+      setIsStarred(true);
+      toast.success("Gist starred successfully!");
+    } else {
+      toast.error("Gist ID is undefined.");
+    }
+  };
 
   return (
     <>
@@ -81,8 +108,18 @@ const GistPage = () => {
             </div>
           </div>
           <div className={styles.actions}>
-            <Button type='primary'>Fork</Button>
-            <Button type='default'>Star</Button>
+            <Button type='primary' className={styles.buttonWithIcon}>
+              <Fork2 />
+              Fork
+            </Button>
+            <Button
+              type='primary'
+              className={styles.buttonWithIcon}
+              onClick={handleStarClick}
+            >
+              {isStarred ? <StarFilled /> : <Star2 />}
+              Star
+            </Button>
           </div>
         </div>
         <div className={styles.fileContent}>
@@ -99,6 +136,11 @@ const GistPage = () => {
           )}
         </div>
       </div>
+      <Toaster
+        toastOptions={{
+          duration: 2000,
+        }}
+      />
     </>
   );
 };

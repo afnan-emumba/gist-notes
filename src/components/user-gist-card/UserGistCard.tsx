@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { Avatar, Skeleton } from "antd";
 import { RootState } from "../../redux/store";
 import CodePreview from "../code-preview/CodePreview";
-import {
-  StarEmpty,
-  // StarFilled,
-  ForkEmpty,
-  // ForkFilled,
-} from "../../assets/icons";
+import { StarEmpty, StarFilled, ForkEmpty } from "../../assets/icons";
+import { starGist, checkGistStarred } from "../../services/gistService";
 import styles from "./UserGistCard.module.scss";
 
 interface UserGistCardProps {
   gistId: string;
+  isStarredGist: boolean;
 }
 
-const UserGistCard = ({ gistId }: UserGistCardProps) => {
+const UserGistCard = ({ gistId, isStarredGist }: UserGistCardProps) => {
   const gist = useSelector((state: RootState) =>
-    state.userGists.gists.find((gist) => gist.id === gistId)
+    isStarredGist
+      ? state.starredGists.gists.find((gist) => gist.id === gistId)
+      : state.userGists.gists.find((gist) => gist.id === gistId)
   );
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isStarred, setIsStarred] = useState<boolean>(false);
 
   const firstFileKey = Object.keys(gist.files)[0];
   const firstFile = gist.files[firstFileKey];
@@ -44,8 +45,26 @@ const UserGistCard = ({ gistId }: UserGistCardProps) => {
       }
     };
 
+    const checkStarredStatus = async () => {
+      const starred = await checkGistStarred(gistId);
+      setIsStarred(starred);
+    };
+
     fetchFileContent();
-  }, [rawUrl]);
+    checkStarredStatus();
+  }, [rawUrl, gistId]);
+
+  const handleStarClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to star a gist.");
+      return;
+    }
+    await starGist(gistId);
+    setIsStarred(true);
+    toast.success("Gist starred successfully!");
+  };
 
   return (
     <div className={styles.gistCard}>
@@ -98,9 +117,22 @@ const UserGistCard = ({ gistId }: UserGistCardProps) => {
         </div>
         <div className={styles.actions}>
           <ForkEmpty />
-          <StarEmpty />
+          {isStarred ? (
+            <div>
+              <StarFilled />
+            </div>
+          ) : (
+            <div onClick={handleStarClick}>
+              <StarEmpty />
+            </div>
+          )}
         </div>
       </div>
+      <Toaster
+        toastOptions={{
+          duration: 2000,
+        }}
+      />
     </div>
   );
 };

@@ -52,3 +52,9 @@
     font-size: 11px;
   }
 }
+
+.buttonWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

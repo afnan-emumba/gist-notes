@@ -5,17 +5,19 @@ import { combineReducers } from "redux";
 import userReducer from "./slices/userSlice";
 import publicGistsReducer from "./slices/publicGistsSlice";
 import userGistsReducer from "./slices/userGistsSlice";
+import starredGistsReducer from "./slices/starredGistsSlice"; // Add this line
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user", "publicGists", "userGists"],
+  whitelist: ["user", "publicGists", "userGists", "starredGists"], // Add "starredGists" here
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
   publicGists: publicGistsReducer,
   userGists: userGistsReducer,
+  starredGists: starredGistsReducer, // Add this line
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

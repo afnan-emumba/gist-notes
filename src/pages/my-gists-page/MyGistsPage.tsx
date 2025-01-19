@@ -68,7 +68,7 @@ const MyGistsPage = () => {
                 onClick={() => handleCardClick(gist.id)}
                 style={{ cursor: "pointer" }}
               >
-                <UserGistCard key={i} gistId={gist.id} />
+                <UserGistCard key={i} gistId={gist.id} isStarredGist={false} />
               </div>
             ))}
           </div>

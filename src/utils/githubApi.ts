@@ -10,8 +10,3 @@ export const gitHubApi = axios.create({
     Authorization: token ? `Bearer ${token}` : null,
   },
 });
-
-export const updateAuthToken = () => {
-  token = localStorage.getItem("token");
-  gitHubApi.defaults.headers.Authorization = token ? `Bearer ${token}` : null;
-};

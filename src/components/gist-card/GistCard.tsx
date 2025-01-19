@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { Avatar } from "antd";
 import { RootState } from "../../redux/store";
 import CodePreview from "../code-preview/CodePreview";
-import {
-  StarEmpty,
-  // StarFilled,
-  ForkEmpty,
-  // ForkFilled,
-} from "../../assets/icons";
+import { StarEmpty, StarFilled, ForkEmpty } from "../../assets/icons";
+import { starGist, checkGistStarred } from "../../services/gistService";
 import styles from "./GistCard.module.scss";
 
 interface GistCardProps {
@@ -22,6 +19,7 @@ const GistCard = ({ gistId }: GistCardProps) => {
   );
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isStarred, setIsStarred] = useState<boolean>(false);
 
   const firstFileKey = Object.keys(gist.files)[0];
   const firstFile = gist.files[firstFileKey];
@@ -41,8 +39,26 @@ const GistCard = ({ gistId }: GistCardProps) => {
       }
     };
 
+    const checkStarredStatus = async () => {
+      const starred = await checkGistStarred(gistId);
+      setIsStarred(starred);
+    };
+
     fetchFileContent();
-  }, [rawUrl]);
+    checkStarredStatus();
+  }, [rawUrl, gistId]);
+
+  const handleStarClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to star a gist.");
+      return;
+    }
+    await starGist(gistId);
+    setIsStarred(true);
+    toast.success("Gist starred successfully!");
+  };
 
   return (
     <div className={styles.gistCard}>
@@ -93,9 +109,22 @@ const GistCard = ({ gistId }: GistCardProps) => {
         </div>
         <div className={styles.actions}>
           <ForkEmpty />
-          <StarEmpty />
+          {isStarred ? (
+            <div>
+              <StarFilled />
+            </div>
+          ) : (
+            <div onClick={handleStarClick}>
+              <StarEmpty />
+            </div>
+          )}
         </div>
       </div>
+      <Toaster
+        toastOptions={{
+          duration: 2000,
+        }}
+      />
     </div>
   );
 };
