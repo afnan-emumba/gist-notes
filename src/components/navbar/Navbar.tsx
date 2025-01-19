@@ -14,8 +14,6 @@ const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
 
-  console.log("nav user", user);
-
   const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       const inputElement = event.target as HTMLInputElement;
@@ -28,41 +26,39 @@ const Navbar = () => {
     {
       label: (
         <div>
-          Signed in as <br />{" "}
-          <span className='font-semibold'>{user?.displayName}</span>
+          <p>
+            Signed in as <br />{" "}
+          </p>
+          <h3>{user?.displayName}</h3>
         </div>
       ),
-      key: "0",
+      key: "name",
     },
     {
       type: "divider",
     },
     {
       label: <Link to='/my-gists/all'>Your Gists</Link>,
-      key: "1",
+      key: "your-gists",
     },
     {
       label: <Link to='/my-gists/starred'>Starred Gists</Link>,
-      key: "3",
+      key: "starred-gists",
     },
     {
-      label: <Link to='/create'>Create Gist</Link>,
-      key: "4",
+      label: (
+        <a href={`https://github.com/${user?.screenName}`} target='_blank'>
+          Your Github Profile
+        </a>
+      ),
+      key: "github-profile",
     },
     {
       type: "divider",
     },
     {
       label: (
-        <a href={`https://github.com/${user?.screenName}`}>
-          Your Github Profile
-        </a>
-      ),
-      key: "5",
-    },
-    {
-      label: (
-        <button
+        <div
           style={{ border: "none", background: "none", cursor: "pointer" }}
           onClick={() => {
             dispatch(clearUser());
@@ -70,9 +66,9 @@ const Navbar = () => {
           }}
         >
           Sign out
-        </button>
+        </div>
       ),
-      key: "6",
+      key: "sign-out",
     },
   ];
 

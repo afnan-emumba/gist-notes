@@ -20,7 +20,11 @@ const GridLayout = ({ gists, currentPage, onPageChange }: GridLayoutProps) => {
     <>
       <div className={styles.gistCards}>
         {gists.map((gist, i) => (
-          <div key={i} onClick={() => handleCardClick(gist.id)} style={{ cursor: "pointer" }}>
+          <div
+            key={i}
+            onClick={() => handleCardClick(gist.id)}
+            style={{ cursor: "pointer" }}
+          >
             <GistCard gistId={gist.id} />
           </div>
         ))}

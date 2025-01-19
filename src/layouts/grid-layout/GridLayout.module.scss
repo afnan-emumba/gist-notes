@@ -1,9 +1,20 @@
 @use "../../theme/style" as *;
 
 .gistCards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 16px;
-  width: 100%;
   box-sizing: border-box;
+}
+
+.gistCard {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

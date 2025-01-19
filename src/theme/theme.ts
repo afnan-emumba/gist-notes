@@ -40,5 +40,8 @@ export const antTheme = {
       itemHoverBg: "#e3e3e3",
       itemHoverColor: "#003B44",
     },
+    Dropdown: {
+      colorText: "#003B44",
+    },
   },
 };

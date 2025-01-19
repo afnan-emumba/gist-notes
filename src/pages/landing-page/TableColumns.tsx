@@ -19,7 +19,9 @@ const tableColumns = [
             marginRight: "10px",
           }}
         />
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{owner.login}</span>
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+          {owner.login}
+        </span>
       </div>
     ),
   },
@@ -32,7 +34,9 @@ const tableColumns = [
       const notebookName = Object.keys(files)[0];
       return (
         <span className={styles.notebook}>
-          {notebookName.length > 20 ? `${notebookName.slice(0, 17)}...` : notebookName}
+          {notebookName.length > 20
+            ? `${notebookName.slice(0, 17)}...`
+            : notebookName}
         </span>
       );
     },
