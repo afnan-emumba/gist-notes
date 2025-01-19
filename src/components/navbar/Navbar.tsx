@@ -42,7 +42,7 @@ const Navbar = () => {
       key: "your-gists",
     },
     {
-      label: <Link to='/my-gists/starred'>Starred Gists</Link>,
+      label: <Link to='/starred-gists'>Starred Gists</Link>,
       key: "starred-gists",
     },
     {

@@ -6,6 +6,7 @@ import { store, persistor } from "./redux/store";
 import { antTheme } from "./theme/theme";
 import MainLayout from "./layouts/main-layout/MainLayout";
 import routes from "./routes/routes";
+import PrivateRoute from "./routes/PrivateRoute";
 import "./App.css";
 
 function App() {
@@ -15,17 +16,27 @@ function App() {
         <ConfigProvider wave={{ disabled: true }} theme={antTheme}>
           <BrowserRouter>
             <Routes>
-              {routes.map(({ path, component: Component }) => (
-                <Route
-                  key={path}
-                  path={path}
-                  element={
-                    <MainLayout>
-                      <Component />
-                    </MainLayout>
-                  }
-                />
-              ))}
+              {routes.map(
+                ({ path, component: Component, private: isPrivate }) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={
+                      isPrivate ? (
+                        <PrivateRoute>
+                          <MainLayout>
+                            <Component />
+                          </MainLayout>
+                        </PrivateRoute>
+                      ) : (
+                        <MainLayout>
+                          <Component />
+                        </MainLayout>
+                      )
+                    }
+                  />
+                )
+              )}
             </Routes>
           </BrowserRouter>
         </ConfigProvider>
