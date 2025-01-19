@@ -80,8 +80,8 @@ const tableColumns = [
     width: antTheme.components.Table.columnWidth.actions,
     render: () => (
       <div style={{ display: "flex", gap: "8px" }}>
-        <StarEmpty />
         <ForkEmpty />
+        <StarEmpty />
       </div>
     ),
   },

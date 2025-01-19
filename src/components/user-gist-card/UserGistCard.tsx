@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Avatar } from "antd";
+import { Avatar, Skeleton } from "antd";
 import { RootState } from "../../redux/store";
 import CodePreview from "../code-preview/CodePreview";
 import {
@@ -10,18 +10,19 @@ import {
   ForkEmpty,
   // ForkFilled,
 } from "../../assets/icons";
-import styles from "./GistCard.module.scss";
+import styles from "./UserGistCard.module.scss";
 
-interface GistCardProps {
+interface UserGistCardProps {
   gistId: string;
 }
 
-const GistCard = ({ gistId }: GistCardProps) => {
+const UserGistCard = ({ gistId }: UserGistCardProps) => {
   const gist = useSelector((state: RootState) =>
-    state.publicGists.gists.find((gist) => gist.id === gistId)
+    state.userGists.gists.find((gist) => gist.id === gistId)
   );
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const firstFileKey = Object.keys(gist.files)[0];
   const firstFile = gist.files[firstFileKey];
@@ -38,6 +39,8 @@ const GistCard = ({ gistId }: GistCardProps) => {
         } else {
           setError("An unknown error occurred.");
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,7 +50,9 @@ const GistCard = ({ gistId }: GistCardProps) => {
   return (
     <div className={styles.gistCard}>
       <div className={styles.fileContent}>
-        {error ? (
+        {loading ? (
+          <Skeleton active />
+        ) : error ? (
           <p>Error: {error}</p>
         ) : fileContent ? (
           <CodePreview
@@ -71,13 +76,13 @@ const GistCard = ({ gistId }: GistCardProps) => {
             }}
           >
             <h4>
-              {gist.owner.login.length > 10
-                ? `${gist.owner.login.substring(0, 10)}...`
+              {gist.owner.login.length > 20
+                ? `${gist.owner.login.substring(0, 20)}...`
                 : gist.owner.login}{" "}
               /{" "}
               <strong>
-                {firstFile.filename.length > 10
-                  ? `${firstFile.filename.substring(0, 10)}...`
+                {firstFile.filename.length > 30
+                  ? `${firstFile.filename.substring(0, 30)}...`
                   : firstFile.filename}
               </strong>
             </h4>
@@ -85,8 +90,8 @@ const GistCard = ({ gistId }: GistCardProps) => {
             <p>Created {new Date(gist.created_at).toLocaleDateString()}</p>
 
             <p>
-              {gist.description && gist.description.length > 30
-                ? `${gist.description.substring(0, 30)}...`
+              {gist.description && gist.description.length > 50
+                ? `${gist.description.substring(0, 50)}...`
                 : gist.description || "No description available"}
             </p>
           </div>
@@ -100,4 +105,4 @@ const GistCard = ({ gistId }: GistCardProps) => {
   );
 };
 
-export default GistCard;
+export default UserGistCard;

@@ -51,9 +51,9 @@ const Navbar = () => {
     },
     {
       label: (
-        <a href={`https://github.com/${user?.screenName}`} target='_blank'>
+        <Link to={`https://github.com/${user?.screenName}`} target='_blank'>
           Your Github Profile
-        </a>
+        </Link>
       ),
       key: "github-profile",
     },

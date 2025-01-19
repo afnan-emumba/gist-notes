@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { RootState } from "../../redux/store";
-import { Button } from "antd";
+import { Button, Avatar } from "antd";
 import CodePreview from "../../components/code-preview/CodePreview";
 import styles from "./GistPage.module.scss";
 import axios from "axios";
@@ -49,19 +49,35 @@ const GistPage = () => {
 
       <div className={styles.gistPage}>
         <div className={styles.header}>
-          <div className={styles.ownerInfo}>
-            <img
-              src={gist.owner.avatar_url}
-              alt='Owner Avatar'
-              className={styles.avatar}
-            />
-            <div>
-              <h3>{gist.owner.login}</h3>
-              <h3>{gist.description || "No description available"}</h3>
+          <div className={styles.details}>
+            <Avatar src={gist.owner.avatar_url} size={40} />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: 8,
+                gap: 4,
+              }}
+            >
+              <h4>
+                {gist.owner.login.length > 40
+                  ? `${gist.owner.login.substring(0, 40)}...`
+                  : gist.owner.login}{" "}
+                /{" "}
+                <strong>
+                  {firstFile.filename.length > 150
+                    ? `${firstFile.filename.substring(0, 150)}...`
+                    : firstFile.filename}
+                </strong>
+              </h4>
+
+              <p>Created {new Date(gist.created_at).toLocaleDateString()}</p>
+
               <p>
-                Created at: {new Date(gist.created_at).toLocaleDateString()}
+                {gist.description && gist.description.length > 100
+                  ? `${gist.description.substring(0, 100)}...`
+                  : gist.description || "No description available"}
               </p>
-              <p>File: {firstFile.filename}</p>
             </div>
           </div>
           <div className={styles.actions}>
@@ -73,7 +89,11 @@ const GistPage = () => {
           {error ? (
             <p>Error: {error}</p>
           ) : fileContent ? (
-            <CodePreview content={fileContent} />
+            <CodePreview
+              content={fileContent}
+              numOfLines={50}
+              language={firstFile.language}
+            />
           ) : (
             <p>No content available</p>
           )}
