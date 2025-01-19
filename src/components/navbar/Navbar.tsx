@@ -38,12 +38,16 @@ const Navbar = () => {
       type: "divider",
     },
     {
-      label: <Link to='/my-gists/all'>Your Gists</Link>,
+      label: <Link to='/my-gists'>Your Gists</Link>,
       key: "your-gists",
     },
     {
       label: <Link to='/my-gists/starred'>Starred Gists</Link>,
       key: "starred-gists",
+    },
+    {
+      label: <Link to='/create-gist'>Create Gist</Link>,
+      key: "create-gist",
     },
     {
       label: (

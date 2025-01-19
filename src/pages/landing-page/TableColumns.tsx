@@ -1,5 +1,6 @@
 import styles from "./LandingPage.module.scss";
 import { antTheme } from "../../theme/theme";
+import { StarEmpty, ForkEmpty } from "../../assets/icons";
 
 const tableColumns = [
   {
@@ -77,7 +78,12 @@ const tableColumns = [
     dataIndex: "actions",
     key: "actions",
     width: antTheme.components.Table.columnWidth.actions,
-    render: () => <button>View</button>,
+    render: () => (
+      <div style={{ display: "flex", gap: "8px" }}>
+        <StarEmpty />
+        <ForkEmpty />
+      </div>
+    ),
   },
 ];
 

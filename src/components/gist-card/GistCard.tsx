@@ -3,8 +3,14 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { Avatar } from "antd";
 import { RootState } from "../../redux/store";
-import styles from "./GistCard.module.scss";
 import CodePreview from "../code-preview/CodePreview";
+import {
+  StarEmpty,
+  // StarFilled,
+  ForkEmpty,
+  // ForkFilled,
+} from "../../assets/icons";
+import styles from "./GistCard.module.scss";
 
 interface GistCardProps {
   gistId: string;
@@ -53,27 +59,40 @@ const GistCard = ({ gistId }: GistCardProps) => {
           <p>No content available</p>
         )}
       </div>
-      <div className={styles.details}>
-        <Avatar src={gist.owner.avatar_url} size={40} />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginLeft: 8,
-            gap: 4,
-          }}
-        >
-          <h4>
-            {gist.owner.login} / <strong>{firstFile.filename}</strong>
-          </h4>
+      <div className={styles.cardFooter}>
+        <div className={styles.details}>
+          <Avatar src={gist.owner.avatar_url} size={40} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginLeft: 8,
+              gap: 4,
+            }}
+          >
+            <h4>
+              {gist.owner.login.length > 10
+                ? `${gist.owner.login.substring(0, 10)}...`
+                : gist.owner.login} /{" "}
+              <strong>
+                {firstFile.filename.length > 10
+                  ? `${firstFile.filename.substring(0, 10)}...`
+                  : firstFile.filename}
+              </strong>
+            </h4>
 
-          <p>Created {new Date(gist.created_at).toLocaleDateString()}</p>
+            <p>Created {new Date(gist.created_at).toLocaleDateString()}</p>
 
-          <p>
-            {gist.description && gist.description.length > 100
-              ? `${gist.description.substring(0, 40)}...`
-              : gist.description || "No description available"}
-          </p>
+            <p>
+              {gist.description && gist.description.length > 30
+                ? `${gist.description.substring(0, 30)}...`
+                : gist.description || "No description available"}
+            </p>
+          </div>
+        </div>
+        <div className={styles.actions}>
+          <StarEmpty />
+          <ForkEmpty />
         </div>
       </div>
     </div>

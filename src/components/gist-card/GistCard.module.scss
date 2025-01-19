@@ -10,6 +10,14 @@
   overflow: hidden;
   width: 410px;
   height: 280px;
+
+  &:hover .fileContent {
+    border: 1px solid $primary-color;
+  }
+
+  &:hover .actions {
+    display: flex;
+  }
 }
 
 .fileContent {
@@ -35,4 +43,20 @@
     color: #7a7a7a;
     font-size: 11px;
   }
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-top: 1px solid #ccc;
+  width: 100%;
+}
+
+.actions {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
