@@ -1,0 +1,39 @@
+@use "../../theme/style" as *;
+
+.heading {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.heading h1 {
+  font-size: 28px;
+  font-weight: 400;
+  color: $primary-color;
+  display: inline-block;
+}
+
+.conatiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  gap: 16px;
+  width: 75%;
+}
+
+.descriptionInput {
+  margin: 16px 0;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+}

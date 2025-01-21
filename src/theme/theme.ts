@@ -43,5 +43,8 @@ export const antTheme = {
     Dropdown: {
       colorText: "#003B44",
     },
+    Card: {
+      headerBg: "#FAFAFA",
+    },
   },
 };
