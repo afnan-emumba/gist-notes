@@ -6,7 +6,12 @@ import { Avatar, Skeleton } from "antd";
 import { RootState } from "../../redux/store";
 import CodePreview from "../code-preview/CodePreview";
 import { StarEmpty, StarFilled, ForkEmpty } from "../../assets/icons";
-import { starGist, checkGistStarred, unstarGist } from "../../services/gistService";
+import {
+  starGist,
+  checkGistStarred,
+  unstarGist,
+  forkGist,
+} from "../../services/gistService";
 import styles from "./UserGistCard.module.scss";
 
 interface UserGistCardProps {
@@ -72,6 +77,21 @@ const UserGistCard = ({ gistId, isStarredGist }: UserGistCardProps) => {
     }
   };
 
+  const handleForkClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to fork a gist.");
+      return;
+    }
+    try {
+      await forkGist(gistId);
+      toast.success("Gist forked successfully!");
+    } catch (err) {
+      toast.error("Failed to fork the gist.");
+    }
+  };
+
   return (
     <div className={styles.gistCard}>
       <div className={styles.fileContent}>
@@ -122,7 +142,9 @@ const UserGistCard = ({ gistId, isStarredGist }: UserGistCardProps) => {
           </div>
         </div>
         <div className={styles.actions}>
-          <ForkEmpty />
+          <div onClick={handleForkClick}>
+            <ForkEmpty />
+          </div>
           {isStarred ? (
             <div>
               <StarFilled />

@@ -10,6 +10,7 @@ import {
   starGist,
   checkGistStarred,
   unstarGist,
+  forkGist,
 } from "../../services/gistService";
 import styles from "./GistCard.module.scss";
 
@@ -70,6 +71,21 @@ const GistCard = ({ gistId }: GistCardProps) => {
     }
   };
 
+  const handleForkClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to fork a gist.");
+      return;
+    }
+    try {
+      await forkGist(gistId);
+      toast.success("Gist forked successfully!");
+    } catch (err) {
+      toast.error("Failed to fork the gist.");
+    }
+  };
+
   return (
     <div className={styles.gistCard}>
       <div className={styles.fileContent}>
@@ -118,7 +134,9 @@ const GistCard = ({ gistId }: GistCardProps) => {
           </div>
         </div>
         <div className={styles.actions}>
-          <ForkEmpty />
+          <div onClick={handleForkClick}>
+            <ForkEmpty />
+          </div>
           {isStarred ? (
             <div onClick={handleStarClick}>
               <StarFilled />

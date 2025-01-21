@@ -34,3 +34,45 @@ export const checkGistStarred = async (gistId: string) => {
     return false;
   }
 };
+
+export const getGistDetails = async (gistId: string) => {
+  try {
+    const response = await apiClient.get(`/gists/${gistId}`);
+    console.log("GIST DEETS", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const forkGist = async (gistId: string) => {
+  try {
+    const response = await apiClient.post(`/gists/${gistId}/forks`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getGistForksCount = async (gistId: string) => {
+  try {
+    let forksCount = 0;
+    let page = 1;
+    let response;
+
+    do {
+      response = await apiClient.get(`/gists/${gistId}/forks`, {
+        params: { page, per_page: 100 },
+      });
+      forksCount += response.data.length;
+      page++;
+    } while (response.data.length === 100);
+
+    return forksCount;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

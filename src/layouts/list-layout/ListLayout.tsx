@@ -3,7 +3,7 @@ import { Table, Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
 import { antTheme } from "../../theme/theme";
 import { ForkEmpty, StarEmpty, StarFilled } from "../../assets/icons";
-import { starGist, checkGistStarred, unstarGist } from "../../services/gistService";
+import { starGist, checkGistStarred, unstarGist, forkGist } from "../../services/gistService";
 import { toast, Toaster } from "react-hot-toast";
 import styles from "./ListLayout.module.scss";
 
@@ -54,6 +54,21 @@ const ListLayout = ({ gists, currentPage, onPageChange }: ListLayoutProps) => {
       await starGist(gistId);
       setStarredGists((prev) => [...prev, gistId]);
       toast.success("Gist starred successfully!");
+    }
+  };
+
+  const handleForkClick = async (e: React.MouseEvent<HTMLDivElement>, gistId: string) => {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to fork a gist.");
+      return;
+    }
+    try {
+      await forkGist(gistId);
+      toast.success("Gist forked successfully!");
+    } catch (err) {
+      toast.error("Failed to fork the gist.");
     }
   };
 
@@ -135,7 +150,9 @@ const ListLayout = ({ gists, currentPage, onPageChange }: ListLayoutProps) => {
       width: antTheme.components.Table.columnWidth.actions,
       render: (_: any, record: any) => (
         <div style={{ display: "flex", gap: "8px" }}>
-          <ForkEmpty />
+          <div onClick={(e) => handleForkClick(e, record.id)}>
+            <ForkEmpty />
+          </div>
           <div onClick={(e) => handleStarClick(e, record.id)}>
             {starredGists.includes(record.id) ? <StarFilled /> : <StarEmpty />}
           </div>

@@ -11,7 +11,9 @@ import UserGistCard from "../../components/user-gist-card/UserGistCard";
 const MyGistsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.user);
-  const { gists, loading, error } = useSelector((state: RootState) => state.userGists);
+  const { gists, loading, error } = useSelector(
+    (state: RootState) => state.userGists
+  );
 
   const navigate = useNavigate();
 
@@ -84,7 +86,11 @@ const MyGistsPage = () => {
                   onClick={() => handleCardClick(gist.id)}
                   style={{ cursor: "pointer" }}
                 >
-                  <UserGistCard key={i} gistId={gist.id} isStarredGist={false} />
+                  <UserGistCard
+                    key={i}
+                    gistId={gist.id}
+                    isStarredGist={false}
+                  />
                 </div>
               ))
             )}

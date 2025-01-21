@@ -1,44 +1,50 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Button, Avatar } from "antd";
-import { RootState } from "../../redux/store";
-import { Star2, Fork2, StarFilled } from "../../assets/icons";
+import { Button, Avatar, Skeleton } from "antd";
+import { Star2, Fork2, Star2Filled } from "../../assets/icons";
 import CodePreview from "../../components/code-preview/CodePreview";
 import styles from "./GistPage.module.scss";
-import { starGist, checkGistStarred } from "../../services/gistService";
+import {
+  starGist,
+  checkGistStarred,
+  unstarGist,
+  forkGist,
+  getGistDetails,
+  getGistForksCount,
+} from "../../services/gistService";
 import toast, { Toaster } from "react-hot-toast";
 
 const GistPage = () => {
   const { gistId } = useParams<{ gistId: string }>();
-  const gist = useSelector((state: RootState) =>
-    state.publicGists.gists.find((gist) => gist.id === gistId)
-  );
+  const [gist, setGist] = useState<any>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isStarred, setIsStarred] = useState<boolean>(false);
-
-  if (!gist) {
-    return <p>Gist not found</p>;
-  }
-
-  const firstFileKey = Object.keys(gist.files)[0];
-  const firstFile = gist.files[firstFileKey];
-  const rawUrl = firstFile.raw_url;
+  const [forksCount, setForksCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchFileContent = async () => {
+    console.log("Gist Page Mounted", gistId);
+    const fetchGistDetails = async () => {
       try {
-        const response = await axios.get(rawUrl);
-        setFileContent(response.data);
+        if (gistId) {
+          const gistData = await getGistDetails(gistId);
+          setGist(gistData);
+          const firstFileKey = Object.keys(gistData.files)[0];
+          const firstFile = gistData.files[firstFileKey];
+          const response = await axios.get(firstFile.raw_url);
+          setFileContent(response.data);
+        }
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
         } else {
           setError("An unknown error occurred.");
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -49,9 +55,18 @@ const GistPage = () => {
       }
     };
 
-    fetchFileContent();
+    const fetchGistForksCount = async () => {
+      if (gistId) {
+        const forksCount = await getGistForksCount(gistId);
+        setForksCount(forksCount);
+      }
+    };
+
+    console.log("Fetching Gist Details!!");
+    fetchGistDetails();
     checkStarredStatus();
-  }, [rawUrl, gistId]);
+    fetchGistForksCount();
+  }, []);
 
   const handleStarClick = async () => {
     const token = localStorage.getItem("token");
@@ -60,13 +75,50 @@ const GistPage = () => {
       return;
     }
     if (gistId) {
-      await starGist(gistId);
-      setIsStarred(true);
-      toast.success("Gist starred successfully!");
+      if (isStarred) {
+        await unstarGist(gistId);
+        setIsStarred(false);
+        toast.success("Gist unstarred successfully!");
+      } else {
+        await starGist(gistId);
+        setIsStarred(true);
+        toast.success("Gist starred successfully!");
+      }
     } else {
       toast.error("Gist ID is undefined.");
     }
   };
+
+  const handleForkClick = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to fork a gist.");
+      return;
+    }
+    if (gistId) {
+      try {
+        await forkGist(gistId);
+        const forksCount = await getGistForksCount(gistId);
+        setForksCount(forksCount);
+        toast.success("Gist forked successfully!");
+      } catch (err) {
+        toast.error("Failed to fork the gist.");
+      }
+    } else {
+      toast.error("Gist ID is undefined.");
+    }
+  };
+
+  if (loading) {
+    return <Skeleton active />;
+  }
+
+  if (!gist) {
+    return <p>Gist not found</p>;
+  }
+
+  const firstFileKey = Object.keys(gist.files)[0];
+  const firstFile = gist.files[firstFileKey];
 
   return (
     <>
@@ -108,29 +160,34 @@ const GistPage = () => {
             </div>
           </div>
           <div className={styles.actions}>
-            <Button type='primary' className={styles.buttonWithIcon}>
-              <Fork2 />
-              Fork
-            </Button>
-            <Button
-              type='primary'
-              className={styles.buttonWithIcon}
-              onClick={handleStarClick}
-            >
-              {isStarred ? <StarFilled /> : <Star2 />}
-              Star
-            </Button>
+            <div className={styles.actionButton}>
+              <Button
+                type='primary'
+                className={styles.buttonWithIcon}
+                onClick={handleForkClick}
+              >
+                <Fork2 />
+                Fork
+              </Button>
+              <p>{forksCount}</p>
+            </div>
+            <div className={styles.actionButton}>
+              <Button
+                type='primary'
+                className={styles.buttonWithIcon}
+                onClick={handleStarClick}
+              >
+                {isStarred ? <Star2Filled /> : <Star2 />}
+                {isStarred ? "Unstar" : "Star"}
+              </Button>
+            </div>
           </div>
         </div>
         <div className={styles.fileContent}>
           {error ? (
             <p>Error: {error}</p>
           ) : fileContent ? (
-            <CodePreview
-              content={fileContent}
-              numOfLines={50}
-              language={firstFile.language}
-            />
+            <CodePreview content={fileContent} language={firstFile.language} />
           ) : (
             <p>No content available</p>
           )}

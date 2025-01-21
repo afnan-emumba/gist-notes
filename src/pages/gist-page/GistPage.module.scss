@@ -56,5 +56,21 @@
 .buttonWithIcon {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  border-radius: 0;
+  padding: 0 16px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid $primary-color;
+  border-radius: 4px;
+
+  p {
+    margin: 0 8px;
+    font-weight: 500;
+    font-size: 14px;
+  }
 }
