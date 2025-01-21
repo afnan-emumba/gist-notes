@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Octokit } from "@octokit/core";
 
 const token = localStorage.getItem("token");
 
@@ -73,6 +74,24 @@ export const getGistForksCount = async (gistId: string) => {
     return forksCount;
   } catch (error) {
     console.error(error);
+    throw error;
+  }
+};
+
+export const createGist = async (description: string, files: { [key: string]: { content: string } }) => {
+  const octokit = new Octokit({
+    auth: token,
+  });
+
+  try {
+    const response = await octokit.request('POST /gists', {
+      description,
+      public: false,
+      files,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating gist:", error);
     throw error;
   }
 };

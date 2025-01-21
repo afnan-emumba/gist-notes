@@ -8,10 +8,38 @@ const { TextArea } = Input;
 interface CreateGistCardProps {
   showDeleteIcon: boolean;
   onDelete: () => void;
+  fileName?: string;
+  fileContent?: string;
+  onFileNameChange?: (fileName: string) => void;
+  onFileContentChange?: (fileContent: string) => void;
 }
 
-const CreateGistCard = ({ showDeleteIcon, onDelete }: CreateGistCardProps) => {
-  const [fileContent, setFileContent] = useState("");
+const CreateGistCard = ({
+  showDeleteIcon,
+  onDelete,
+  fileName,
+  fileContent,
+  onFileNameChange,
+  onFileContentChange,
+}: CreateGistCardProps) => {
+  const [fileNameState, setFileNameState] = useState(fileName || "");
+  const [fileContentState, setFileContentState] = useState(fileContent || "");
+
+  const handleFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileNameState(e.target.value);
+    if (onFileNameChange) {
+      onFileNameChange(e.target.value);
+    }
+  };
+
+  const handleFileContentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFileContentState(e.target.value);
+    if (onFileContentChange) {
+      onFileContentChange(e.target.value);
+    }
+  };
 
   const cardHeader = () => {
     return (
@@ -19,6 +47,8 @@ const CreateGistCard = ({ showDeleteIcon, onDelete }: CreateGistCardProps) => {
         <Input
           placeholder='File name including extension...'
           className={styles.inputFilename}
+          value={fileNameState}
+          onChange={handleFileNameChange}
         />
         {showDeleteIcon && (
           <div onClick={onDelete} style={{ cursor: "pointer" }}>
@@ -32,8 +62,8 @@ const CreateGistCard = ({ showDeleteIcon, onDelete }: CreateGistCardProps) => {
   return (
     <Card className={styles.card} title={cardHeader()}>
       <TextArea
-        value={fileContent}
-        onChange={(e) => setFileContent(e.target.value)}
+        value={fileContentState}
+        onChange={handleFileContentChange}
         placeholder='Enter file content here...'
         className={styles.textArea}
         rows={10}
