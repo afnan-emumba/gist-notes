@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Octokit } from "@octokit/core";
 
-const token = localStorage.getItem("token");
+const token =
+  localStorage.getItem("token") || import.meta.env.VITE_GITHUB_TOKEN;
 
 const apiClient = axios.create({
   baseURL: "https://api.github.com",
@@ -78,13 +79,16 @@ export const getGistForksCount = async (gistId: string) => {
   }
 };
 
-export const createGist = async (description: string, files: { [key: string]: { content: string } }) => {
+export const createGist = async (
+  description: string,
+  files: { [key: string]: { content: string } }
+) => {
   const octokit = new Octokit({
     auth: token,
   });
 
   try {
-    const response = await octokit.request('POST /gists', {
+    const response = await octokit.request("POST /gists", {
       description,
       public: false,
       files,
