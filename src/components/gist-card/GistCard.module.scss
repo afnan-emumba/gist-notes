@@ -18,6 +18,14 @@
   &:hover .actions {
     display: flex;
   }
+
+  @media (min-width: 1920px) {
+    width: 450px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .fileContent {
