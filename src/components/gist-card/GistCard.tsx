@@ -6,7 +6,11 @@ import { Avatar } from "antd";
 import { RootState } from "../../redux/store";
 import CodePreview from "../code-preview/CodePreview";
 import { StarEmpty, StarFilled, ForkEmpty } from "../../assets/icons";
-import { starGist, checkGistStarred } from "../../services/gistService";
+import {
+  starGist,
+  checkGistStarred,
+  unstarGist,
+} from "../../services/gistService";
 import styles from "./GistCard.module.scss";
 
 interface GistCardProps {
@@ -55,9 +59,15 @@ const GistCard = ({ gistId }: GistCardProps) => {
       toast.error("You must be logged in to star a gist.");
       return;
     }
-    await starGist(gistId);
-    setIsStarred(true);
-    toast.success("Gist starred successfully!");
+    if (isStarred) {
+      await unstarGist(gistId);
+      setIsStarred(false);
+      toast.success("Gist unstarred successfully!");
+    } else {
+      await starGist(gistId);
+      setIsStarred(true);
+      toast.success("Gist starred successfully!");
+    }
   };
 
   return (
@@ -110,7 +120,7 @@ const GistCard = ({ gistId }: GistCardProps) => {
         <div className={styles.actions}>
           <ForkEmpty />
           {isStarred ? (
-            <div>
+            <div onClick={handleStarClick}>
               <StarFilled />
             </div>
           ) : (

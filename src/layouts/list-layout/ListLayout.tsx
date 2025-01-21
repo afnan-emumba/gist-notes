@@ -3,7 +3,7 @@ import { Table, Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
 import { antTheme } from "../../theme/theme";
 import { ForkEmpty, StarEmpty, StarFilled } from "../../assets/icons";
-import { starGist, checkGistStarred } from "../../services/gistService";
+import { starGist, checkGistStarred, unstarGist } from "../../services/gistService";
 import { toast, Toaster } from "react-hot-toast";
 import styles from "./ListLayout.module.scss";
 
@@ -46,9 +46,15 @@ const ListLayout = ({ gists, currentPage, onPageChange }: ListLayoutProps) => {
       toast.error("You must be logged in to star a gist.");
       return;
     }
-    await starGist(gistId);
-    setStarredGists((prev) => [...prev, gistId]);
-    toast.success("Gist starred successfully!");
+    if (starredGists.includes(gistId)) {
+      await unstarGist(gistId);
+      setStarredGists((prev) => prev.filter((id) => id !== gistId));
+      toast.success("Gist unstarred successfully!");
+    } else {
+      await starGist(gistId);
+      setStarredGists((prev) => [...prev, gistId]);
+      toast.success("Gist starred successfully!");
+    }
   };
 
   const tableColumns = [

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-hot-toast";
 
 const token = localStorage.getItem("token");
 
@@ -14,9 +13,15 @@ const apiClient = axios.create({
 export const starGist = async (gistId: string) => {
   try {
     await apiClient.put(`/gists/${gistId}/star`);
-    toast.success("Gist starred successfully!");
   } catch (error) {
-    toast.error("Failed to star the gist.");
+    console.error(error);
+  }
+};
+
+export const unstarGist = async (gistId: string) => {
+  try {
+    await apiClient.delete(`/gists/${gistId}/star`);
+  } catch (error) {
     console.error(error);
   }
 };

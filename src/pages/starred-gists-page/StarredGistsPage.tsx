@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
-import { Button, Avatar } from "antd";
+import { Button, Avatar, Pagination, Skeleton } from "antd";
 import { RootState, AppDispatch } from "../../redux/store";
 import { getStarredGists } from "../../redux/slices/starredGistsSlice";
 import styles from "./StarredGistsPage.module.scss";
@@ -17,6 +17,17 @@ const StarredGistsPage = () => {
   console.log("Starred Gists Page Mounted", gists);
 
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const gistsPerPage = 2;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastGist = currentPage * gistsPerPage;
+  const indexOfFirstGist = indexOfLastGist - gistsPerPage;
+  const currentGists = gists.slice(indexOfFirstGist, indexOfLastGist);
 
   useEffect(() => {
     if (user) {
@@ -66,11 +77,11 @@ const StarredGistsPage = () => {
           </div>
           <div className={styles.gistCards}>
             {loading ? (
-              <p>Loading...</p>
+              <Skeleton active />
             ) : error ? (
               <p>Error: {error}</p>
             ) : (
-              gists.map((gist, i) => (
+              currentGists.map((gist, i) => (
                 <div
                   key={i}
                   onClick={() => handleCardClick(gist.id)}
@@ -81,6 +92,14 @@ const StarredGistsPage = () => {
               ))
             )}
           </div>
+          <Pagination
+            current={currentPage}
+            simple
+            pageSize={gistsPerPage}
+            total={gists.length}
+            onChange={handlePageChange}
+            align='end'
+          />
         </div>
       </div>
     </>
