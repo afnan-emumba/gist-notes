@@ -23,10 +23,11 @@ const CodePreview = ({ content, numOfLines, language }: CodePreviewProps) => {
       wrapLongLines
       customStyle={{
         fontSize: "11px",
-        backgroundColor: "transparent",
+        backgroundColor: "#f5f5f5",
         overflow: "hidden",
-        width: "100%",
-        height: "100%",
+        width: "100%", /* Ensure it takes full width of parent */
+        whiteSpace: "pre-wrap", /* Ensure content wraps */
+        wordBreak: "break-word", /* Break long words */
       }}
     >
       {displayedContent}

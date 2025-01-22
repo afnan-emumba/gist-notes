@@ -1,9 +1,16 @@
 @use "../../theme/style" as *;
 
+// .gistCards {
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: space-between;
+//   gap: 16px;
+//   box-sizing: border-box;
+// }
+
 .gistCards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(410px, 1fr));
   gap: 16px;
   box-sizing: border-box;
 }
