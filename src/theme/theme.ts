@@ -46,5 +46,8 @@ export const antTheme = {
     Card: {
       headerBg: "#FAFAFA",
     },
+    Skeleton: {
+      paragraphLiHeight: 70,
+    },
   },
 };

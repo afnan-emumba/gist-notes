@@ -110,7 +110,9 @@ const GistPage = () => {
   };
 
   if (loading) {
-    return <Skeleton active />;
+    return (
+      <Skeleton active title={false} paragraph={{ rows: 5, width: "100%" }} />
+    );
   }
 
   if (!gist) {

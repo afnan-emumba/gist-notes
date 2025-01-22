@@ -96,7 +96,11 @@ const UserGistCard = ({ gistId, isStarredGist }: UserGistCardProps) => {
     <div className={styles.gistCard}>
       <div className={styles.fileContent}>
         {loading ? (
-          <Skeleton active />
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 5, width: "100%" }}
+          />
         ) : error ? (
           <p>Error: {error}</p>
         ) : fileContent ? (

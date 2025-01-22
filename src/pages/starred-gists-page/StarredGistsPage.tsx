@@ -77,7 +77,11 @@ const StarredGistsPage = () => {
           </div>
           <div className={styles.gistCards}>
             {loading ? (
-              <Skeleton active />
+              <Skeleton
+                active
+                title={false}
+                paragraph={{ rows: 5, width: "100%" }}
+              />
             ) : error ? (
               <p>Error: {error}</p>
             ) : (
